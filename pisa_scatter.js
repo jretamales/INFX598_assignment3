@@ -170,6 +170,7 @@ function drawVis(data) {
     .shapeWidth(30)
     .cells([20616,14000, 8160, 5600, 687])
     .orient('vertical')
+    .labels([20616,14000, 8160 + " (mean)", 5600, 687])
     .title("Educational Spending per student")
     .scale(linear);
 
