@@ -153,14 +153,14 @@ var label = svg.append("text")
 
 function drawVis(data) {
 //calling color scale to implement diverging color scale
-    var linear = col.domain([d3.min(dataset.map(function (d) {
+    var linear = col.domain([d3.max(dataset.map(function (d) {
         return d.spending;
-    })), d3.mean(dataset.map(function (d) {
+    })), d3.median(dataset.map(function (d) {
         return d.spending;
-    })), d3.max(dataset.map(function (d) {
+    })), d3.min(dataset.map(function (d) {
         return d.spending;
     }))])
-        .range(["red", "white", "blue"])
+        .range(["blue", "white", "red"])
 
     svg.append("g")
     .attr("class", "legendLinear")
@@ -168,7 +168,9 @@ function drawVis(data) {
 
     var legendLinear = d3.legend.color()
     .shapeWidth(30)
+    .cells([20616,14000, 8160, 5600, 687])
     .orient('vertical')
+    .title("Educational Spending per student")
     .scale(linear);
 
     svg.select(".legendLinear")
