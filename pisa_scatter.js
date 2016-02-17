@@ -85,7 +85,7 @@ d3.csv("PISA_Spending_2012_summary.csv", function (error, test_scores) {
     });
 });
 
-var col = d3.scale.linear();
+var col = d3.scale.quantize();
 
 var x = d3.scale.linear()
     .domain([300, 650])
@@ -152,30 +152,37 @@ var label = svg.append("text")
     .text("");
 
 function drawVis(data) {
+
+    var MaxSpending = d3.max(dataset.map(function (d) {
+        return d.spending;
+    }));
+
+    var MeanSpending = d3.mean(dataset.map(function (d) {
+        return d.spending;
+    }));
+
+    var MinSpending = d3.min(dataset.map(function (d) {
+        return d.spending;
+    }));
+
 //calling color scale to implement diverging color scale
-    var linear = col.domain([d3.max(dataset.map(function (d) {
-        return d.spending;
-    })), d3.median(dataset.map(function (d) {
-        return d.spending;
-    })), d3.min(dataset.map(function (d) {
-        return d.spending;
-    }))])
-        .range(["blue", "white", "red"])
+    var ordinal = col
+    .domain([MaxSpending,  (MaxSpending +MeanSpending)/2 ,MeanSpending, (MinSpending +MeanSpending)/2 , MinSpending])
+        .range(["rgb(5,113,176)", "rgb(146,197,222)", "rgb(247,247,247)", "rgb(244,165,130)", "rgb(202,0,32)"])
 
     svg.append("g")
-    .attr("class", "legendLinear")
+    .attr("class", "legendOrdinal")
     .attr("transform", "translate(20,20)");
 
-    var legendLinear = d3.legend.color()
+    var legendOrdinal = d3.legend.color()
     .shapeWidth(30)
-    .cells([20616,14000, 8160, 5600, 687])
     .orient('vertical')
-    .labels([20616,14000, 8160 + " (mean)", 5600, 687])
+    //.labels(["Above avg.","", "Average", "", "Below avg."])
     .title("Educational Spending per student")
-    .scale(linear);
+    .scale(ordinal);
 
-    svg.select(".legendLinear")
-    .call(legendLinear);
+    svg.select(".legendOrdinal")
+    .call(legendOrdinal);
 
     // Adding an overlay for the country label.
     var box = label.node().getBBox();
