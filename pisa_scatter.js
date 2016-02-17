@@ -167,8 +167,8 @@ function drawVis(data) {
 
 //calling color scale to implement diverging color scale
     var ordinal = col
-    .domain([MaxSpending,  (MaxSpending +MeanSpending)/2 ,MeanSpending, (MinSpending +MeanSpending)/2 , MinSpending])
-        .range(["rgb(5,113,176)", "rgb(146,197,222)", "rgb(247,247,247)", "rgb(244,165,130)", "rgb(202,0,32)"])
+    .domain([MinSpending, (MinSpending +MeanSpending)/2, MeanSpending, (MaxSpending +MeanSpending)/2 ,MaxSpending])
+        .range([ "rgb(202,0,32)", "rgb(244,165,130)" , "rgb(247,247,247)", "rgb(146,197,222)", "rgb(5,113,176)"])
 
     svg.append("g")
     .attr("class", "legendOrdinal")
@@ -177,6 +177,7 @@ function drawVis(data) {
     var legendOrdinal = d3.legend.color()
     .shapeWidth(30)
     .orient('vertical')
+    .ascending(true)
     //.labels(["Above avg.","", "Average", "", "Below avg."])
     .title("Educational Spending per student")
     .scale(ordinal);
