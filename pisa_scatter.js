@@ -85,8 +85,6 @@ d3.csv("PISA_Spending_2012_summary.csv", function (error, test_scores) {
     });
 });
 
-
-
 var col = d3.scale.linear();
 
 var x = d3.scale.linear()
@@ -142,7 +140,6 @@ svg.append("g")
     .attr("transform", "translate(" + w/2.8 + "," + -30 +")")
     .text("PISA 2012 Test results");
 
-
 var tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
@@ -154,10 +151,9 @@ var label = svg.append("text")
     .attr("x", w)
     .text("");
 
-
 function drawVis(data) {
 //calling color scale to implement diverging color scale
-    col.domain([d3.min(dataset.map(function (d) {
+    var linear = col.domain([d3.min(dataset.map(function (d) {
         return d.spending;
     })), d3.mean(dataset.map(function (d) {
         return d.spending;
@@ -165,6 +161,18 @@ function drawVis(data) {
         return d.spending;
     }))])
         .range(["red", "white", "blue"])
+
+    svg.append("g")
+    .attr("class", "legendLinear")
+    .attr("transform", "translate(20,20)");
+
+    var legendLinear = d3.legend.color()
+    .shapeWidth(30)
+    .orient('vertical')
+    .scale(linear);
+
+    svg.select(".legendLinear")
+    .call(legendLinear);
 
     // Adding an overlay for the country label.
     var box = label.node().getBBox();
@@ -195,7 +203,7 @@ function drawVis(data) {
               .duration(200)
               .style("opacity", .9);
 
-          tooltip.text("Math:" + Math.round(d.math) + "  Reading:" + Math.round(d.reading))
+          tooltip.text(d.Country + "    Math:" + Math.round(d.math) + "  Reading:" + Math.round(d.reading))
               .style("left", (d3.event.pageX + 3) + "px")
               .style("top", (d3.event.pageY - 28) + "px");
 
@@ -231,7 +239,7 @@ function drawVis(data) {
               .duration(200)
               .style("opacity", .9);
 
-          tooltip.text("Math:" + Math.round(d.math) + "  Reading:" + Math.round(d.reading))
+          tooltip.text(d.Country + ",    Math:" + Math.round(d.math) + "  Reading:" + Math.round(d.reading))
               .style("left", (d3.event.pageX + 3) + "px")
               .style("top", (d3.event.pageY - 28) + "px");
 
